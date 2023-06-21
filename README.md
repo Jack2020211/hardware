@@ -1,0 +1,2 @@
+# hardware
+everything about hardware
