@@ -1,0 +1,1 @@
+"myware\MCP4921\MCP4921.c" ROM(COMPACT) OPTIMIZE (8,SPEED) BROWSE MODP2 INCDIR(.\start;.\myware\LCD_1602;.\myware\MAX1241;.\myware\MCP4921;.\myware\TIM;.\myware\KEY;.\myware\Filter;.\myware\TLC0832) DEBUG OBJECTEXTEND PRINT(.\Listings\MCP4921.lst) TABS (2) OBJECT(.\Objects\MCP4921.obj)

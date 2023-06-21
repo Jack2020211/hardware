@@ -1,0 +1,81 @@
+C51 COMPILER V9.60.0.0   TLC0832                                                           06/11/2023 10:35:51 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TLC0832
+OBJECT MODULE PLACED IN .\Objects\TLC0832.obj
+COMPILER INVOKED BY: D:\Keil_for_c51\C51\BIN\C51.EXE myware\TLC0832\TLC0832.c ROM(COMPACT) OPTIMIZE(8,SPEED) BROWSE MODP
+                    -2 INCDIR(.\start;.\myware\LCD_1602;.\myware\MAX1241;.\myware\MCP4921;.\myware\TIM;.\myware\KEY;.\myware\Filter;.\myware\
+                    -TLC0832) DEBUG OBJECTEXTEND PRINT(.\Listings\TLC0832.lst) TABS(2) OBJECT(.\Objects\TLC0832.obj)
+
+line level    source
+
+   1          #include "TLC0832.H"
+   2          void ADC0832_init(void)
+   3          {
+   4   1          ADC0832_CS=1;//芯片不工作
+   5   1          ADC0832_CLK=0;
+   6   1          ADC0832_DIN=0;
+   7   1      }
+   8          
+   9          unsigned char ADC0832_ReadAD(void)
+  10          {
+  11   1          unsigned char i,AD_value1=0x00,AD_value2=0x00;
+  12   1          ADC0832_CS=0;//芯片工作(初始cs信号为高电平)
+  13   1          
+  14   1          ADC0832_DIN=1;//起始信号S
+  15   1          ADC0832_CLK=1;//上升沿将起始信号Start写入
+  16   1          ADC0832_CLK=0;
+  17   1          
+  18   1      //----------------通道地址设置----0通道（单端模式）---------------//    
+  19   1          
+  20   1          ADC0832_DIN=1;//mode状态位置1
+  21   1          ADC0832_CLK=1;//将mode状态位写入
+  22   1          ADC0832_CLK=0;
+  23   1          
+  24   1          ADC0832_DIN=0;//通道选择0通道
+  25   1          ADC0832_CLK=1;//将通道选择位写入
+  26   1          ADC0832_CLK=0;//第4个脉冲下降沿后，ADC0832_DIN端口失效,无作用
+  27   1          
+  28   1          ADC0832_DIN=1;//ADC0832_DIN转为改高阻状态（数据线拉高，等待下次接收数据）
+  29   1          
+  30   1      //---------------------读取相对应的通道0的AD数据--------------------------//
+  31   1          ADC0832_DOUT=1;//数据线拉高，等待接收数据
+  32   1          
+  33   1          for(i=0;i<8;i++)//MSB
+  34   1          {
+  35   2              ADC0832_CLK=1;
+  36   2              ADC0832_CLK=0;
+  37   2              if(ADC0832_DOUT){AD_value1=AD_value1 |(0x80>>i);}//优先读取最高位        MSB
+  38   2          }
+  39   1          
+  40   1          for(i=0;i<8;i++)//LSB
+  41   1          {
+  42   2              if(ADC0832_DOUT){AD_value2=AD_value2 |(0x01<<i);}//优先读取最低位        LSB
+  43   2              ADC0832_CLK=1;
+  44   2              ADC0832_CLK=0;
+  45   2          }    
+  46   1      
+  47   1          ADC0832_DOUT=1;//数据线拉高，等待接收数据
+  48   1          ADC0832_CS=1;//芯片停止工作
+  49   1          
+  50   1      
+  51   1          return (AD_value1==AD_value2)? AD_value1:0;//判断前后两次读取数据是否相同(前后两个字节数据校验)
+  52   1      }
+  53          
+C51 COMPILER V9.60.0.0   TLC0832                                                           06/11/2023 10:35:51 PAGE 2   
+
+  54          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    115    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

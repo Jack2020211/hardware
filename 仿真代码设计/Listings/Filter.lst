@@ -1,0 +1,96 @@
+C51 COMPILER V9.60.0.0   FILTER                                                            06/11/2023 10:24:18 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FILTER
+OBJECT MODULE PLACED IN .\Objects\Filter.obj
+COMPILER INVOKED BY: D:\Keil_for_c51\C51\BIN\C51.EXE myware\Filter\Filter.c COMPACT ROM(COMPACT) OPTIMIZE(8,SPEED) BROWS
+                    -E INCDIR(.\start;.\myware\LCD_1602;.\myware\MAX1241;.\myware\MCP4921;.\myware\TIM;.\myware\KEY;.\myware\Filter;.\myware\
+                    -TLC0832) DEBUG OBJECTEXTEND PRINT(.\Listings\Filter.lst) TABS(2) OBJECT(.\Objects\Filter.obj)
+
+line level    source
+
+   1          #include "Filter.H"
+   2          #define N 20
+   3          
+   4          
+   5          float value_buf[N];
+   6          float middleAverageFilter()
+   7          {
+   8   1          u16 i,j,k;
+   9   1          float temp,sum = 0;
+  10   1          
+  11   1          for(i = 0; i < N; ++i)
+  12   1          {
+  13   2              value_buf[i] = read_max1241_V();
+  14   2      //        delay_ms(10);
+  15   2          }
+  16   1          /*从小到大冒泡排序*/  
+  17   1          for(j = 0; j < N-1; ++j)
+  18   1          {
+  19   2              for(k = 0; k < N-j-1; ++k)
+  20   2              {
+  21   3                  if(value_buf[k] > value_buf[k+1])
+  22   3                  {
+  23   4                      temp = value_buf[k];
+  24   4                      value_buf[k] = value_buf[k+1];
+  25   4                      value_buf[k+1] = temp;
+  26   4                    
+  27   4                  }
+  28   3              }
+  29   2          }
+  30   1          for(i = 5; i < N-5; ++i)
+  31   1          {
+  32   2              sum += value_buf[i];
+  33   2          } 
+  34   1          return sum/(N-10);
+  35   1      }
+  36          
+  37          float middleAverageFilter_1()
+  38          {
+  39   1          u16 i,j,k;
+  40   1          float temp,sum = 0;
+  41   1      //    float value_buf[N];
+  42   1          for(i = 0; i < N; ++i)
+  43   1          {
+  44   2              value_buf[i] = ADC0832_ReadAD();
+  45   2      //        delay_ms(10);
+  46   2          }
+  47   1          /*从小到大冒泡排序*/  
+  48   1          for(j = 0; j < N-1; ++j)
+  49   1          {
+  50   2              for(k = 0; k < N-j-1; ++k)
+  51   2              {
+  52   3                  if(value_buf[k] > value_buf[k+1])
+  53   3                  {
+C51 COMPILER V9.60.0.0   FILTER                                                            06/11/2023 10:24:18 PAGE 2   
+
+  54   4                      temp = value_buf[k];
+  55   4                      value_buf[k] = value_buf[k+1];
+  56   4                      value_buf[k+1] = temp;
+  57   4                    
+  58   4                  }
+  59   3              }
+  60   2          }
+  61   1          for(i = 5; i < N-5; ++i)
+  62   1          {
+  63   2              sum += value_buf[i];
+  64   2          } 
+  65   1          return sum/(N-10);
+  66   1      }
+  67          
+  68          
+  69          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    752    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =     80      28
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

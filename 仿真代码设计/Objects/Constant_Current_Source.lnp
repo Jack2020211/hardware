@@ -1,0 +1,14 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\public.obj",
+".\Objects\LCD1602.obj",
+".\Objects\MAX1241.obj",
+".\Objects\MCP4921.obj",
+".\Objects\Tim.obj",
+".\Objects\KEY.obj",
+".\Objects\TLC0832.obj" 
+TO ".\Objects\Constant_Current_Source" 
+PRINT(".\Listings\Constant_Current_Source.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
+CODE( 0X0000-0X7FFF )
+XDATA( 0X0000-0X00FF )
